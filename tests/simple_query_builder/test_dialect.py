@@ -17,8 +17,9 @@ class TestDialect(unittest.TestCase):
 
     def test_dialect_composed(self):
         expected = ['BETWEEN', 'AND']
-        assert self.dialect.composed('between')[0] == expected[0]
-        assert self.dialect.composed('between')[1] == expected[1]
+
+        for idx, part in enumerate(expected):
+            assert self.dialect.composed('between')[idx] == part
 
     def test_dialect_separator(self):
         expected = ","

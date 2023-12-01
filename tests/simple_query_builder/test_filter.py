@@ -95,9 +95,8 @@ class TestFilter(unittest.TestCase):
 
         self.filter.order_by('name')
 
-        assert self.filter._globals['order_by'][0] == expected[0]
-        assert self.filter._globals['order_by'][1] == expected[1]
-        assert self.filter._globals['order_by'][2] == expected[2]
+        for idx, part in enumerate(expected):
+            assert self.filter._globals['order_by'][idx] == part
 
         assert self.filter.dump_globals() == ' '.join(expected)
 
@@ -106,9 +105,8 @@ class TestFilter(unittest.TestCase):
 
         self.filter.order_by('age', -1)
 
-        assert self.filter._globals['order_by'][0] == expected[0]
-        assert self.filter._globals['order_by'][1] == expected[1]
-        assert self.filter._globals['order_by'][2] == expected[2]
+        for idx, part in enumerate(expected):
+            assert self.filter._globals['order_by'][idx] == part
 
         assert self.filter.dump_globals() == ' '.join(expected)
 
@@ -117,8 +115,8 @@ class TestFilter(unittest.TestCase):
 
         self.filter.limit(10)
 
-        assert self.filter._globals['limit'][0] == expected[0]
-        assert self.filter._globals['limit'][1] == expected[1]
+        for idx, part in enumerate(expected):
+            assert self.filter._globals['limit'][idx] == part
 
         assert self.filter.dump_globals() == ' '.join(expected)
 
@@ -127,8 +125,8 @@ class TestFilter(unittest.TestCase):
 
         self.filter.offset(0)
 
-        assert self.filter._globals['offset'][0] == expected[0]
-        assert self.filter._globals['offset'][1] == expected[1]
+        for idx, part in enumerate(expected):
+            assert self.filter._globals['offset'][idx] == part
 
         assert self.filter.dump_globals() == ' '.join(expected)
 

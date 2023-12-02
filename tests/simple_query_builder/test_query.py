@@ -7,25 +7,25 @@ class TestQuery(unittest.TestCase):
     def setUp(self):
         self.query = Query()
 
-    def test_query_alias(self):
+    def test_alias(self):
         expected_type = q()
         assert isinstance(expected_type, Query)
 
-    def test_query_set_statement(self):
+    def test_set_statement(self):
         expected = "insert"
 
         query = Query(expected)
 
-        assert query._statement == expected
+        self.assertEqual(query._statement, expected)
 
-    def test_query_set_entity(self):
+    def test_set_entity(self):
         expected = "some_sql_table"
 
         self.query.entity(expected)
 
-        assert self.query._entity == expected
+        self.assertEqual(self.query._entity, expected)
 
-    def test_query_set_filter(self):
+    def test_set_filter(self):
         expected_filter = Filter()
 
         self.query.filter(expected_filter)
@@ -38,7 +38,7 @@ class TestQuery(unittest.TestCase):
         self.query.set_columns(columns)
 
         for idx, column in enumerate(columns):
-            assert self.query._columns[idx] == column
+            self.assertEqual(self.query._columns[idx], column)
 
     def test_set_row_0(self):
         expected = ["1", "'my name'", "'email@somehost'"]
@@ -46,7 +46,7 @@ class TestQuery(unittest.TestCase):
         self.query.set_row([1, "my name", "email@somehost"])
 
         for idx, row in enumerate(expected):
-            assert self.query._rows[0][idx] == row
+            self.assertEqual(self.query._rows[0][idx], row)
 
     def test_set_row_1(self):
         expected_rows = [
@@ -59,7 +59,7 @@ class TestQuery(unittest.TestCase):
 
         for row_idx, row in enumerate(self.query._rows):
             for idx, expected_row in enumerate(expected_rows[row_idx]):
-                assert row[idx] == expected_row
+                self.assertEqual(row[idx], expected_row)
 
     def test_set_data_0(self):
         expected_columns = ["id", "name", "email"]
@@ -68,10 +68,10 @@ class TestQuery(unittest.TestCase):
         self.query.set_data({"id": 1, "name": "my name", "email": "email@somehost"})
 
         for idx, column in enumerate(expected_columns):
-            assert self.query._columns[idx] == column
+            self.assertEqual(self.query._columns[idx], column)
 
         for idx, row in enumerate(expected_row):
-            assert self.query._rows[0][idx] == row
+            self.assertEqual(self.query._rows[0][idx], row)
 
     def test_set_data_1(self):
         expected_columns = ["id", "name", "email"]
@@ -87,11 +87,11 @@ class TestQuery(unittest.TestCase):
         )
 
         for idx, column in enumerate(expected_columns):
-            assert self.query._columns[idx] == column
+            self.assertEqual(self.query._columns[idx], column)
 
         for row_idx, row in enumerate(self.query._rows):
             for idx, expected_row in enumerate(expected_rows[row_idx]):
-                assert row[idx] == expected_row
+                self.assertEqual(row[idx], expected_row)
 
     def test_query_dump_insert_0(self):
         expected = (
@@ -105,7 +105,7 @@ class TestQuery(unittest.TestCase):
             .set_data({"id": 1, "name": "my name", "email": "email@somehost"})
         )
 
-        assert query.dump_insert() == expected
+        self.assertEqual(query.dump_insert(), expected)
 
     def test_query_dump_insert_1(self):
         expected = (
@@ -123,7 +123,7 @@ class TestQuery(unittest.TestCase):
             )
         )
 
-        assert query.dump_insert() == expected
+        self.assertEqual(query.dump_insert(), expected)
 
     def test_query_dump_update(self):
         expected = (
@@ -140,14 +140,14 @@ class TestQuery(unittest.TestCase):
             .set_data({"name": "my other name", "email": "other_email@somehost"})
         )
 
-        assert query.dump_update() == expected
+        self.assertEqual(query.dump_update(), expected)
 
     def test_query_dump_delete(self):
         expected = "DELETE FROM users WHERE id = 2;"
 
         query = Query("delete").entity("users").filter(Filter.equals("id", 2))
 
-        assert query.dump_delete() == expected
+        self.assertEqual(query.dump_delete(), expected)
 
     def test_query_dump_select(self):
         expected = (
@@ -169,4 +169,4 @@ class TestQuery(unittest.TestCase):
             )
         )
 
-        assert query.dump_select() == expected
+        self.assertEqual(query.dump_select(), expected)

@@ -20,8 +20,8 @@ class _SymbolMap():
     values: dict[str, str] = {}
     operators: dict[str, str] = {}
     composed: dict[str, list[str]] = {}
+    statements: dict[str, list[str]] = {}
     separators: dict[str, str] = {}
-    clauses: dict[str, str] = {}
     wrappers: dict[str, str] = {}
 
     def __init__(self):
@@ -30,8 +30,8 @@ class _SymbolMap():
         self.values = default_map['values']
         self.operators = default_map['operators']
         self.composed = default_map['composed']
+        self.statements = default_map['statements']
         self.separators = default_map['separators']
-        self.clauses = default_map['clauses']
         self.wrappers = default_map['wrappers']
 
 
@@ -78,20 +78,16 @@ _SYMBOL_MAP = {
             'limit': ['LIMIT'],
             'offset': ['OFFSET'],
         },
+        'statements': {
+            'insert': ['INSERT INTO', 'VALUES'],
+            'update': ['UPDATE', 'SET', '=', 'WHERE'],
+            'delete': ['DELETE FROM', 'WHERE'],
+            'select': ['SELECT', 'FROM', 'WHERE'],
+        },
         'separators': {
             'list': ',',
             'statement': ';',
-        },
-        'clauses': {
-            'insert_into': 'INSERT INTO',
-            'insert_values': 'VALUES',
-            'select': 'SELECT',
-            'select_from': 'FROM',
-            'update': 'UPDATE',
-            'update_set': 'SET',
-            'update_assign': '=',
-            'delete_from': 'DELETE FROM',
-            'where': 'WHERE',
+            'empty': ' ',
         },
         'wrappers': {
             'string': "''",

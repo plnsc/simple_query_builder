@@ -7,27 +7,30 @@ class TestSymbolMap(unittest.TestCase):
     def setUp(self):
         self.map = _SymbolMap()
 
-    def map_validate_property(self, entries):
+    def map_validate_list(self, entries):
         for entry in entries:
             assert type(entries[entry]) is str
 
+    def map_validade_dict(self, entries):
+        for entry in entries:
+            assert type(entries[entry]) is list
+            assert all(
+                [type(part) is str for part in entries[entry]])
+
     def test_map_values(self):
-        self.map_validate_property(self.map.values)
+        self.map_validate_list(self.map.values)
 
     def test_map_operators(self):
-        self.map_validate_property(self.map.operators)
+        self.map_validate_list(self.map.operators)
 
     def test_map_composed(self):
-        for entry in self.map.composed:
-            assert type(self.map.composed[entry]) is list
-            assert all(
-                [type(part) is str for part in self.map.composed[entry]])
+        self.map_validade_dict(self.map.composed)
+
+    def test_map_statements(self):
+        self.map_validade_dict(self.map.statements)
 
     def test_map_separators(self):
-        self.map_validate_property(self.map.separators)
-
-    def test_map_clauses(self):
-        self.map_validate_property(self.map.clauses)
+        self.map_validate_list(self.map.separators)
 
     def test_map_wrappers(self):
-        self.map_validate_property(self.map.wrappers)
+        self.map_validate_list(self.map.wrappers)

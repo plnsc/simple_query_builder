@@ -1,5 +1,5 @@
 """
-Builds criteria to be used in the full SQL clauses.
+Builds criteria to be used in the full SQL statements.
 
 TODO: list of what needs to be done in **filter.py**
 (1): find a way to someshow attach _globals recursively 'til it reaches the
@@ -14,10 +14,11 @@ from simple_query_builder.dialect import _Dialect
 
 
 class Filter(_Dialect):
-    # simple criteria that can be nested together
+    """Simple criteria meant to filter data, can be nested together and may
+    appear more than once in the statement"""
     _parts: list[str]
-    # criteria meant for limiting data and not filtering it and can be defined
-    # only once throughout the entire statement
+    """Criteria meant for limiting data and can be defined only once
+    throughout the entire statement"""
     _globals: dict[str, list[str]]  # (1)
 
     def __init__(self):
@@ -29,7 +30,7 @@ class Filter(_Dialect):
     # of getting safe strings that can be attached in the final SQL string
 
     def dump_parts(self, wrap_it=False) -> str:
-        result = ' '.join(self._parts).strip()
+        result = self.separator('empty', self._parts)
 
         if wrap_it:
             return self.wrapper('group', result)
@@ -37,13 +38,13 @@ class Filter(_Dialect):
         return result
 
     def dump_globals(self) -> str:
-        result = ''
+        result = []
 
         for name in ['order_by', 'limit', 'offset']:  # (2)
             if name in self._globals:
-                result += '%s ' % ' '.join(self._globals[name])
+                result.append(self.separator('empty', self._globals[name]))
 
-        return result.strip()
+        return self.separator('empty', result)
 
     # ** below this point methods are returning the reference to the instance
     # as a convenience to ease the handling of it  **
@@ -84,25 +85,32 @@ class Filter(_Dialect):
     # ** methods to set global criteria **
 
     def order_by(self, identifier: str, direction=1) -> 'Filter':
-        self.set_globals('order_by', [
-            self.composed('order_by')[0],
+        order_by_symbol, asc_symbol, desc_symbol = self.composed('order_by')
+
+        result = (self._globals['order_by']
+                  if 'order_by' in self._globals
+                  else [order_by_symbol])
+
+        result.append(self.separator('empty', [
             self.wrapper('identifier', identifier),
-            self.composed('order_by')[1 if direction >= 0 else 2]
+            asc_symbol if direction >= 0 else desc_symbol
+        ]))
+
+        self.set_globals('order_by', [
+            result[0],
+            self.separator('list', result[1:])
         ])
+
         return self
 
     def limit(self, value: any) -> 'Filter':
-        self.set_globals('limit', [
-            self.composed('limit')[0],
-            self.sanitize(value)
-        ])
+        limit_symbol, = self.composed('limit')
+        self.set_globals('limit', [limit_symbol, self.sanitize(value)])
         return self
 
     def offset(self, value: any) -> 'Filter':
-        self.set_globals('offset', [
-            self.composed('offset')[0],
-            self.sanitize(value)
-        ])
+        offset_symbol, = self.composed('offset')
+        self.set_globals('offset', [offset_symbol, self.sanitize(value)])
         return self
 
     # ** factory methods **
@@ -119,11 +127,12 @@ class Filter(_Dialect):
     @staticmethod
     def between(identifier: str, start: any, end: any) -> 'Filter':
         filter = Filter()
+        between_symbol, and_symbol = filter.composed('between')
         return filter.set_parts([
             filter.wrapper('identifier', identifier),
-            filter.composed('between')[0],
+            between_symbol,
             filter.sanitize(start),
-            filter.composed('between')[1],
+            and_symbol,
             filter.sanitize(end)
         ])
 

@@ -21,13 +21,25 @@ class TestDialect(unittest.TestCase):
         for idx, part in enumerate(expected):
             assert self.dialect.composed('between')[idx] == part
 
-    def test_dialect_separator(self):
-        expected = ","
-        assert self.dialect.separator('list') == expected
+    def test_dialect_separator_0(self):
+        expected = '1, 2, 3'
+        assert self.dialect.separator('list', ['1', '2', '3']) == expected
 
-    def test_dialect_clause(self):
-        expected = "WHERE"
-        assert self.dialect.clause('where') == expected
+    def test_dialect_separator_1(self):
+        expected = 'CAN NOT BE MINIFIED'
+        self.dialect._minified = True
+        assert self.dialect.separator(
+            'empty', ['CAN', 'NOT', 'BE', 'MINIFIED']) == expected
+
+    def test_dialect_separator_2(self):
+        expected = 'CANBEMINIFIED'
+        self.dialect._minified = True
+        assert self.dialect.separator(
+            'empty', ['CAN', 'BE', 'MINIFIED'], True) == expected
+
+    def test_dialect_statement(self):
+        expected = ['SELECT', 'FROM', 'WHERE']
+        assert self.dialect.statement('select') == expected
 
     def test_dialect_wrapper_0(self):
         expected = "'some value'"

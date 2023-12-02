@@ -18,7 +18,7 @@ class TestFilter(unittest.TestCase):
         assert self.filter.dump_parts() == ' '.join(expected)
 
     def test_filter_dump_globals(self):
-        expected = 'ORDER BY name LIMIT 10 OFFSET 0'
+        expected = 'ORDER BY name LIMIT 10 O1FSET 0'
         self.filter._globals = {
             'order_by': ['ORDER BY', 'name'],
             'limit': ['LIMIT', '10'],
@@ -91,7 +91,7 @@ class TestFilter(unittest.TestCase):
         pass
 
     def test_filter_order_by_0(self):
-        expected = ['ORDER BY', 'name', 'ASC']
+        expected = ['ORDER BY', 'name ASC']
 
         self.filter.order_by('name')
 
@@ -101,9 +101,21 @@ class TestFilter(unittest.TestCase):
         assert self.filter.dump_globals() == ' '.join(expected)
 
     def test_filter_order_by_1(self):
-        expected = ['ORDER BY', 'age', 'DESC']
+        expected = ['ORDER BY', 'age DESC']
 
         self.filter.order_by('age', -1)
+
+        for idx, part in enumerate(expected):
+            assert self.filter._globals['order_by'][idx] == part
+
+        assert self.filter.dump_globals() == ' '.join(expected)
+
+    def test_filter_order_by_2(self):
+        expected = ['ORDER BY', 'name ASC, age DESC']
+
+        (self.filter
+         .order_by('name')
+         .order_by('age', -1))
 
         for idx, part in enumerate(expected):
             assert self.filter._globals['order_by'][idx] == part

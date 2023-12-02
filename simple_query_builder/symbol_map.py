@@ -1,7 +1,7 @@
 """
 Map of elements that may differ between different SQL dialects.
 
-TODO: list of what needs to be done in **symbol_map.py**
+TODO:
 [ ]: think of a way of warning if the file is called outside package context because this is a internal only class is not needed outside it
 [ ]: commented out operators still need more thought to it
 [ ]: implement a way of overriding the symbols when other dialects are included
@@ -57,20 +57,20 @@ _SYMBOL_MAP = {
             # Logical
             "and": "AND",
             "or": "OR",
-            # 'not': 'NOT', (2)
+            # "not": "NOT", (2)
             # Arithmetic (3)
-            # 'addition': '+',
-            # 'subtraction': '-',
-            # 'multiplication': '*',
-            # 'division': '/',
-            # 'modulo': '%',
+            # "addition": "+",
+            # "subtraction": "-",
+            # "multiplication": "*",
+            # "division": "/",
+            # "modulo": "%",
             # Other
-            # 'alias': 'AS', (4)
+            "alias": "AS",  # (4)
         },
         # Global clauses and operators outside {val} {operator} {val} format
         "composed": {
             "between": ["BETWEEN", "AND"],
-            # 'group_by': ['GROUP BY', 'HAVING'], (5)
+            # "group_by": ["GROUP BY", "HAVING"],  # (5)
             "order_by": ["ORDER BY", "ASC", "DESC"],
             "limit": ["LIMIT"],
             "offset": ["OFFSET"],

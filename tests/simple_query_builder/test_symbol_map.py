@@ -14,7 +14,6 @@ class TestSymbolMap(unittest.TestCase):
     def validade_dict(self, symbols_list):
         for symbol in symbols_list:
             self.assertIsInstance(symbols_list[symbol], list)
-
             for symbol_part in symbols_list[symbol]:
                 self.assertIsInstance(symbol_part, str)
 

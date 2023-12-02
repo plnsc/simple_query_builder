@@ -2,7 +2,9 @@
 Provide simple tools to help building SQL queries.
 """
 
+from .filter import Filter
 from .filter import Filter as f
-from .filter import *
+from .query import Query
 from .query import Query as q
-from .query import *
+
+__all__ = ["Filter", "Query", "f", "q"]

@@ -2,10 +2,12 @@
 Operations that are common between all entities to normalize the SQL
 values, operators, identifiers and statements.
 
-TODO: list of what needs to be done
-[ ]: think of a way of warning if the file is called outside package context because this is a internal only class is not needed outside it
+TODO:
+[ ]: think of a way of warning if the file is called outside package context
+     because this is a internal only class is not needed outside it
 [ ]: (1) think of a way to improve sanitization of numeric values
-[ ]: (2) think of a way to safely sanitize other values (json may be a good way of doing it for when a dict is found
+[ ]: (2) think of a way to safely sanitize other values (json may be a good way
+     of doing it for when a dict is found
 """
 
 from typing import final
@@ -38,7 +40,7 @@ class _Dialect:
         return self._map.statements[key]
 
     @final
-    def separator(self, key: str, value: list[any], minifiable=False) -> str:
+    def separator(self, key: str, value: list, minifiable=False) -> str:
         separator = "%s " % self._map.separators[key]
         result = value
 
@@ -53,16 +55,15 @@ class _Dialect:
         return separator.join(value).strip()
 
     @final
-    def wrapper(self, key: str, value: any) -> str:
+    def wrapper(self, key: str, value) -> str:
         wrapper = self._map.wrappers[key]
         return "".join([wrapper[:1], value, wrapper[1:]])
 
     @final
-    def sanitize(self, value: any) -> str:  # (1)(2)
+    def sanitize(self, value) -> str:  # (1)(2)
         if isinstance(value, list):
-            return self.wrapper(
-                "group", self.separator("list", [self.sanitize(v) for v in value])
-            )
+            return self.wrapper("group", self.separator("list", [
+                self.sanitize(v) for v in value]))
         elif isinstance(value, str):
             return self.wrapper("string", value)
         elif isinstance(value, bool):

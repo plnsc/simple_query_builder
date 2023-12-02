@@ -9,13 +9,12 @@ class TestSymbolMap(unittest.TestCase):
 
     def map_validate_list(self, entries):
         for entry in entries:
-            assert type(entries[entry]) is str
+            assert isinstance(entries[entry], str)
 
     def map_validade_dict(self, entries):
         for entry in entries:
-            assert type(entries[entry]) is list
-            assert all(
-                [type(part) is str for part in entries[entry]])
+            assert isinstance(entries[entry], list)
+            assert all([isinstance(part, str) for part in entries[entry]])
 
     def test_map_values(self):
         self.map_validate_list(self.map.values)

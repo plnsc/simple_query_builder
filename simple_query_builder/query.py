@@ -1,4 +1,5 @@
 """
+Builds SQL statements.
 
 TODO:
 [ ]: Maybe add the feature to call a new instance from any methods that care invoked the class staticly (?)

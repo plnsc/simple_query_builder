@@ -49,6 +49,16 @@ class Query(_Dialect):
         self.set_row(data.values())
         return self
 
+    def dump(self) -> str:
+        if self._statement == 'insert':
+            return self.dump_insert()
+        elif self._statement == 'update':
+            return self.dump_update()
+        elif self._statement == 'delete':
+            return self.dump_delete()
+        elif self._statement == 'select':
+            return self.dump_select()
+
     def dump_insert(self) -> str:
         (insert_symbol, values_symbol) = self.statement("insert")
         entity = self.wrapper("identifier", self._entity)

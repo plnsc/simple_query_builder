@@ -95,6 +95,34 @@ class TestQuery(unittest.TestCase):
                  }))
         self.assertEqual(query.dump_insert(), expected)
 
+    def test_query_dump_0(self):
+        expected = "INSERT INTO users (name) VALUES ('name');"
+        query = (Query("insert")
+                 .entity("users")
+                 .set_data({"name": "name"}))
+        self.assertEqual(query.dump(), expected)
+
+    def test_query_dump_1(self):
+        expected = "UPDATE users SET name = 'all names';"
+        query = (Query("update")
+                 .entity("users")
+                 .set_data({"name": "all names", }))
+        self.assertEqual(query.dump(), expected)
+
+    def test_query_dump_2(self):
+        expected = "DELETE FROM users WHERE id = 1;"
+        query = (Query("delete")
+                 .entity("users")
+                 .filter(Filter.equals("id", 1)))
+        self.assertEqual(query.dump(), expected)
+
+    def test_query_dump_3(self):
+        expected = "SELECT name FROM users;"
+        query = (Query("select")
+                 .entity("users")
+                 .set_columns(["name",]))
+        self.assertEqual(query.dump(), expected)
+
     def test_query_dump_insert_1(self):
         expected = (
             "INSERT INTO users (id, name, email) VALUES (1, 'my name', 'email@somehost'), (2, 'my other name', 'other_email@somehost');")

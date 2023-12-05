@@ -4,7 +4,7 @@ Builds criteria to be used in the full SQL statements.
 TODO:
 [ ]: Maybe add the feature to call a new instance from any methods that care invoked the class staticly (?)
 [ ]: Feature to add another filter by passing it in __new__ (?)
-[ ]: (1) find a way to someshow attach _globals recursively 'til it reaches the first upmost filter making it avaible and replaceble throughtout all nested filter chain (should it be broken into another class?
+[ ]: (1) Find a way to someshow attach _globals recursively 'til it reaches the first upmost filter making it avaible and replaceble throughtout all nested filter chain (should it be broken into another class?
 [ ]: (2) GROUP BY and HAVING need some thought about it before implement it be cause it uses SQL functions and thats other thing that I didn't think about it yet too
 """
 
@@ -35,7 +35,7 @@ class Filter(_Dialect):
     def dump_globals(self) -> str:
         result = []
 
-        for name in ["order_by", "limit", "offset"]:  # (2)
+        for name in ("order_by", "limit", "offset"):  # (2)
             if name in self._globals:
                 result.append(self.separator("empty", self._globals[name]))
 

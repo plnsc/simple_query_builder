@@ -7,4 +7,4 @@ from .filter import Filter as f
 from .query import Query
 from .query import Query as q
 
-__all__ = ["Filter", "Query", "f", "q"]
+__all__ = ("Filter", "Query", "f", "q")

@@ -4,8 +4,9 @@ Builds SQL statements.
 TODO:
 [ ]: Maybe add the feature to call a new instance from any methods that care invoked the class staticly (?)
 [ ]: Feature to add another filter by passing it in __new__ (?)
-[ ]: called it Query instead of Statement to make the class name short
-[ ]: the validation to make sure that the rows and columns to match eachother need some thought about it
+[ ]: Called it Query instead of Statement to make the class name short
+[ ]: Validation to make sure that the rows and columns to match eachother need some thought about it
+[ ]: Implement a feature to new line formated queries and minified ones
 """
 
 from simple_query_builder import Filter
@@ -51,13 +52,13 @@ class Query(_Dialect):
         return self
 
     def dump(self) -> str:
-        if self._statement == 'insert':
+        if self._statement == "insert":
             return self.dump_insert()
-        elif self._statement == 'update':
+        elif self._statement == "update":
             return self.dump_update()
-        elif self._statement == 'delete':
+        elif self._statement == "delete":
             return self.dump_delete()
-        elif self._statement == 'select':
+        elif self._statement == "select":
             return self.dump_select()
 
     def dump_insert(self) -> str:
@@ -89,7 +90,7 @@ class Query(_Dialect):
         return self.separator("statement", [self.separator("empty", result)])
 
     def dump_delete(self) -> str:
-        delete_symbol, where_symbol = self.statement("delete")
+        (delete_symbol, where_symbol) = self.statement("delete")
         entity = self.wrapper("identifier", self._entity)
 
         result = [delete_symbol, entity]
@@ -102,7 +103,7 @@ class Query(_Dialect):
         return self.separator("statement", [self.separator("empty", result)])
 
     def dump_select(self) -> str:
-        select_symbol, from_symbol, where_symbol = self.statement("select")
+        (select_symbol, from_symbol, where_symbol) = self.statement("select")
         entity = self.wrapper("identifier", self._entity)
         columns = self.separator("list", self._columns)
 

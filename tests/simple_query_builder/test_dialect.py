@@ -18,11 +18,11 @@ class TestDialect(unittest.TestCase):
         self.assertEqual(received, expected)
 
     def test_composed(self):
-        for idx, expected in enumerate(["BETWEEN", "AND"]):
+        for idx, expected in enumerate(("BETWEEN", "AND")):
             self.assertEqual(self.dialect.composed("between")[idx], expected)
 
     def test_statement(self):
-        expected = ["SELECT", "FROM", "WHERE"]
+        expected = ("SELECT", "FROM", "WHERE")
         received = self.dialect.statement("select")
         self.assertEqual(received, expected)
 

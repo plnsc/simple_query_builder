@@ -2,22 +2,22 @@
 Map of elements that may differ between different SQL dialects.
 
 TODO:
-[ ]: think of a way of warning if the file is called outside package context because this is a internal only class is not needed outside it
-[ ]: commented out operators still need more thought to it
-[ ]: implement a way of overriding the symbols when other dialects are included
-[ ]: (1) has no shortcut method 'cause I can't figure it out yet a non-restrict name for it
-[ ]: (2) still did not thought in what way this is used alone
-[ ]: (3) did not done anything with arithmetic operators yet
-[ ]: (4) alias is alone there because didn't found a way of "group call it" yet wanted to throw it together with the ones in 'values' and call it 'typing' but forgot that typing is a reserved word :p
-[ ]: (5) dragging it to be the last one to make
+[ ]: Commented out operators still need more thought to it
+[ ]: Implement a way of overriding the symbols when other dialects are included
+[ ]: (1) Has no shortcut method 'cause I can't figure it out yet a non-restrict name for it
+[ ]: (2) Still did not thought in what way this is used alone
+[ ]: (3) Did not done anything with arithmetic operators yet
+[ ]: (4) Alias is alone there because didn't found a way of "group call it" yet wanted to throw it together with the ones in 'values' and call it 'typing' but forgot that typing is a reserved word :p
+[ ]: (5) Dragging it to be the last one to make
 """
+from types import MappingProxyType
 
 
 class _SymbolMap:
     values: dict[str, str] = {}
     operators: dict[str, str] = {}
-    composed: dict[str, list[str]] = {}
-    statements: dict[str, list[str]] = {}
+    composed: dict[str, tuple[str]] = {}
+    statements: dict[str, tuple[str]] = {}
     separators: dict[str, str] = {}
     wrappers: dict[str, str] = {}
 
@@ -32,7 +32,7 @@ class _SymbolMap:
         self.wrappers = default_map["wrappers"]
 
 
-_SYMBOL_MAP = {
+_SYMBOL_MAP = MappingProxyType({
     "default": {
         "values": {
             "true": "TRUE",
@@ -69,17 +69,17 @@ _SYMBOL_MAP = {
         },
         # Global clauses and operators outside {val} {operator} {val} format
         "composed": {
-            "between": ["BETWEEN", "AND"],
-            # "group_by": ["GROUP BY", "HAVING"],  # (5)
-            "order_by": ["ORDER BY", "ASC", "DESC"],
-            "limit": ["LIMIT"],
-            "offset": ["OFFSET"],
+            "between": ("BETWEEN", "AND"),
+            # "group_by": ("GROUP BY", "HAVING"),  # (5)
+            "order_by": ("ORDER BY", "ASC", "DESC"),
+            "limit": ("LIMIT",),
+            "offset": ("OFFSET",),
         },
         "statements": {
-            "insert": ["INSERT INTO", "VALUES"],
-            "update": ["UPDATE", "SET", "=", "WHERE"],
-            "delete": ["DELETE FROM", "WHERE"],
-            "select": ["SELECT", "FROM", "WHERE"],
+            "insert": ("INSERT INTO", "VALUES"),
+            "update": ("UPDATE", "SET", "=", "WHERE"),
+            "delete": ("DELETE FROM", "WHERE"),
+            "select": ("SELECT", "FROM", "WHERE"),
         },
         "separators": {
             "list": ",",
@@ -92,4 +92,4 @@ _SYMBOL_MAP = {
             "group": "()",
         },
     }
-}
+})

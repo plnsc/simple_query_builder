@@ -3,10 +3,8 @@ Operations that are common between all entities to normalize the SQL
 values, operators, identifiers and statements.
 
 TODO:
-[ ]: think of a way of warning if the file is called outside package context
-     because this is a internal only class is not needed outside it
-[ ]: (1) think of a way to improve sanitization of numeric values
-[ ]: (2) think of a way to safely sanitize other values (json may be a good way
+[ ]: (1) Think of a way to improve sanitization of numeric values
+[ ]: (2) Think of a way to safely sanitize other values (json may be a good way
      of doing it for when a dict is found
 """
 
@@ -32,21 +30,21 @@ class _Dialect:
         return self._map.operators[key]
 
     @final
-    def composed(self, key: str) -> list[str]:
+    def composed(self, key: str) -> tuple[str]:
         return self._map.composed[key]
 
     @final
-    def statement(self, key: str) -> list[str]:
+    def statement(self, key: str) -> tuple[str]:
         return self._map.statements[key]
 
     @final
     def separator(self, key: str, value: list, minifiable=False) -> str:
-        separator = "%s " % self._map.separators[key]
+        separator = "{} ".format(self._map.separators[key])
         result = value
 
         if key == "statement":
             result.append("")
-        if key == "empty":
+        elif key == "empty":
             separator = self._map.separators[key]
 
         if self._minified is True and minifiable is True:

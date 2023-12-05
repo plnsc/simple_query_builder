@@ -14,7 +14,7 @@ to deviver it in various flavors using Python. -->
 Creating simple criteria:
 
 ```python
-filter = f.equals('column_name', 'some_value')
+filter = f.equals("column_name", "some_value")
 print(filter.dump_parts())
 # Output:
 #     column_name = 'some_value'
@@ -24,8 +24,8 @@ Composed criteria:
 
 ```python
 filter = (f()
-          .add(f.create('colmun_bool', 'is', False))
-          .add_or(f.create('another_column_bool', 'is_not', True)))
+          .add(f.create("colmun_bool", "is", False))
+          .add_or(f.create("another_column_bool", "is_not", True)))
 print(filter.dump_parts())
 # Output:
 #     colmun_bool IS FALSE OR another_column_bool IS NOT TRUE
@@ -35,11 +35,11 @@ They can be nested:
 
 ```python
 filter = (f()
-          .add(f.create('colmun_bool', 'is', False))
-          .add_or(f.create('another_column_bool', 'is_not', True))
+          .add(f.create("colmun_bool", "is", False))
+          .add_or(f.create("another_column_bool", "is_not", True))
           .add_or(f()
-                  .add(f.equals('some_number', 100))
-                  .add(f.like('some_text', '%to match%'))
+                  .add(f.equals("some_number", 100))
+                  .add(f.like("some_text", "%to match%"))
                   .wrap_it()))
 print(filter.dump_parts())
 # Output:

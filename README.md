@@ -1,4 +1,4 @@
-# simple_query_build
+# simple_query_builder
 
 Builds SQL queries from two main classes: `Filter` and `Query`.
 
